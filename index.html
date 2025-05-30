@@ -1,170 +1,177 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <head>
+    <link rel="icon" type="image/png" href="./logohtml.webp" />
+    <title>Clarín - Alpine 3D</title>
+    <meta charset="utf-8" />
+    <meta name="description" content="&lt;model-viewer&gt; template" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link type="text/css" href="./styles.css" rel="stylesheet" />
 
-<head>
-  <link rel="icon" type="image/png" href="./logohtml.webp" />
-  <title>Clarín - Alpine 3D</title>
-  <meta charset="utf-8">
-  <meta name="description" content="&lt;model-viewer&gt; template">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link type="text/css" href="./styles.css" rel="stylesheet" />
+  
+  </head>
 
-  <style>
-    /* Barra de progreso */
-    #progress-container {
-      position: absolute;
-      top: 40%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 150px;
-      height: 15px;
-      background-color: #3d3c3c;
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: 0 0 5px rgba(0,0,0,0.2);
-      z-index: 1000;
-      /* border: 1px solid rgb(53, 52, 52); */
-    }
-
-    #progress-bar {
-      height: 100%;
-      width: 0;
-      background: linear-gradient(90deg, #0565BB, #F587B8);
-      border-radius: 15px 0 0 15px;
-      transition: width 0.2s ease;
-    }
-
-    #progress-text {
-      position: absolute;
-      width: 300px;
-      height: 30px;
-      top: -7px;
-      left: -73px;
-      /* transform: translate(50%); */
-      font-size: 12px;
-      line-height: 30px;
-      text-align: center;
-      font-weight: 100;
-      font-family: Arial, Helvetica, sans-serif;
-      color: #ffffff;
-      user-select: none;
-      pointer-events: none;
-    }
-  </style>
-</head>
-
-<body>
-  <!-- <model-viewer> HTML element -->
-    <div class="model-container" style="overflow: hidden;">
-      <img src="./bg.png" alt="" class="bg" >
-      <model-viewer src="./modelo.glb" id="viewer" ar ar-modes="webxr scene-viewer quick-look" tone-mapping="neutral" 
-      shadow-intensity="1" camera-controls touch-action="pan-y" disable-pan camera-orbit="60deg 85deg -0.1m"  >
-      <!-- shadow-intensity="1" camera-controls touch-action="pan-y" disable-pan camera-orbit="60deg 85deg -0.1m"  auto-rotate auto-rotate-delay="1" rotation-per-second="15deg"> -->
-      <div class="progress-bar hide" slot="progress-bar">
-        <div class="update-bar"></div>
-      </div>
-      <!-- <div id="model" slot="poster" style="color: rgb(0, 0, 0); position: absolute;" class="loaderDivModel1">
+  <body>
+    <!-- <model-viewer> HTML element -->
+    <div class="model-container" style="overflow: hidden">
+      <img src="./bg.png" alt="" class="bg" />
+      <model-viewer
+        src="./modelo.glb"
+        id="viewer"
+        ar
+        ar-modes="scene-viewer webxr quick-look"
+        tone-mapping="neutral"
+        camera-controls
+        shadow-intensity="1"
+        touch-action="pan-y"
+        disable-pan
+        camera-orbit="-63deg 80deg 0.3m"
+        field-of-view="30deg"
+      >
+        <a
+          href="https://tecnologiacomercial.com.ar/files/alpine-maquetado-04/landing/"
+          target="_blank"
+          class="button-bg"
+        >
+          <img src="./button.png" alt="" />
+        </a>
+        <!-- shadow-intensity="1" camera-controls touch-action="pan-y" disable-pan camera-orbit="60deg 85deg -0.1m"  auto-rotate auto-rotate-delay="1" rotation-per-second="15deg"> -->
+        <div class="progress-bar hide" slot="progress-bar">
+          <div class="update-bar"></div>
+        </div>
+        <!-- <div id="model" slot="poster" style="color: rgb(0, 0, 0); position: absolute;" class="loaderDivModel1">
         <div id="loader" class="loaderModel1" style="border-top: 3px solid #000000"></div>
         <p style="color: rgb(0, 0, 0)">Cargando Modelo 3D</p>
         <p style="color: rgb(0, 0, 0); padding: 0; margin: 0;">Esperá un momento</p>
         <p style="color: rgb(0, 0, 0); padding: 0; margin: 0;">Dependerá de la conexión a internet</p>
       </div> -->
-      <button slot="ar-button" id="ar-button" style="width: fit-content; height: 90px; visibility: hidden;">
-        Ver en Realidad Aumentada
-      </button>
-      <div id="ar-prompt">
-        <img src="ar_hand_prompt.png" alt="AR Prompt">
-      </div>
-    </model-viewer>
-    
-    <!-- Barra de progreso visual -->
-    <div id="progress-container">
-      <div id="progress-bar"></div>
-      <div id="progress-text">0%</div>
+        <button
+          slot="ar-button"
+          id="ar-button"
+          style="width: fit-content; height: 90px; visibility: hidden"
+        >
+          Ver en Realidad Aumentada
+        </button>
+        <div id="ar-prompt">
+          <img src="ar_hand_prompt.png" alt="AR Prompt" />
+        </div>
+        <!--  -->
+        </div>
+      </model-viewer>
+
+      <!-- Barra de progreso visual -->
+       <div id="progress-div" class="div-progress">
+
+         <div id="progress-container">
+           <div id="progress-bar"></div>
+           <div id="progress-text">0%</div>
+          </div>
+        </div>
     </div>
-    
-  </div>
-  <script>
-    // Forzar versión única del modelo
-    // const modelURL = 'modelo.glb?v=' + Date.now();
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        const prompt = document.querySelector(".interaction-prompt");
+        if (prompt) {
+          prompt.classList.add("visible");
+        }
+      });
+      // Forzar versión única del modelo
+      // const modelURL = 'modelo.glb?v=' + Date.now();
 
-    // // Intentar borrar caché programáticamente
-    // if ('caches' in window) {
-    //   caches.keys().then(names => {
-    //     for (let name of names) {
-    //       caches.delete(name);
-    //     }
-    //   });
-    // }
-
-    // // También limpiar Service Workers si hay
-    // if ('serviceWorker' in navigator) {
-    //   navigator.serviceWorker.getRegistrations().then(registrations => {
-    //     for (let registration of registrations) {
-    //       registration.unregister();
-    //     }
-    //   });
-    // }
-
-    // // Borrar localStorage y sessionStorage
-    // localStorage.clear();
-    // sessionStorage.clear();
-
-    async function loadModelWithProgress(url) {
-      const response = await fetch(url);
-      const reader = response.body.getReader();
-      const contentLength = +response.headers.get('Content-Length');
-
-      let receivedLength = 0; // bytes recibidos
-      const chunks = []; // array para almacenar los datos recibidos
-
-      while(true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        chunks.push(value);
-        receivedLength += value.length;
-
-        const percent = Math.round((receivedLength / contentLength) * 100);
-        document.getElementById('progress-text').textContent = `${percent}%`;
-        document.getElementById('progress-bar').style.width = percent + '%';
-      }
-
-      // Unir todos los chunks en un solo Uint8Array
-      // let chunksAll = new Uint8Array(receivedLength);
-      // let position = 0;
-      // for(let chunk of chunks) {
-      //   chunksAll.set(chunk, position);
-      //   position += chunk.length;
+      // // Intentar borrar caché programáticamente
+      // if ('caches' in window) {
+      //   caches.keys().then(names => {
+      //     for (let name of names) {
+      //       caches.delete(name);
+      //     }
+      //   });
       // }
 
-      // Crear blob y url para cargar en model-viewer
-      // const blob = new Blob([chunksAll], { type: 'model/gltf-binary' });
-      // const blobUrl = URL.createObjectURL(blob);
+      // // También limpiar Service Workers si hay
+      // if ('serviceWorker' in navigator) {
+      //   navigator.serviceWorker.getRegistrations().then(registrations => {
+      //     for (let registration of registrations) {
+      //       registration.unregister();
+      //     }
+      //   });
+      // }
 
-      // const modelViewer = document.getElementById('viewer');
-      // modelViewer.src = blobUrl;
+      // // Borrar localStorage y sessionStorage
+      // localStorage.clear();
+      // sessionStorage.clear();
 
-      // Opcional: esconder barra cuando termina
-setTimeout(() => {
-  document.getElementById('progress-container').style.display = 'none';
-}, 500);
-    }
+      async function loadModelWithProgress(url) {
+        const response = await fetch(url);
+        const reader = response.body.getReader();
+        const contentLength = +response.headers.get("Content-Length");
 
-    document.addEventListener('DOMContentLoaded', () => {
-      loadModelWithProgress('modelo.glb');
-    });
-  </script>
+        let receivedLength = 0; // bytes recibidos
+        const chunks = []; // array para almacenar los datos recibidos
 
-  <script src="script.js"></script>
-  <script src="functions-model.js"></script>
-  <script>
-  const viewer = document.querySelector('#viewer');
-  viewer.addEventListener('load', () => {
-    viewer.model.scale.set(4, 4, 4); // escala 2x
-  });
-</script>
-  <!-- Loads <model-viewer> for browsers: -->
-  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
-</body>
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          chunks.push(value);
+          receivedLength += value.length;
 
+          const percent = Math.round((receivedLength / contentLength) * 100);
+          document.getElementById("progress-text").textContent = `${percent}%`;
+          document.getElementById("progress-bar").style.width = percent + "%";
+        }
+
+        // Unir todos los chunks en un solo Uint8Array
+        // let chunksAll = new Uint8Array(receivedLength);
+        // let position = 0;
+        // for(let chunk of chunks) {
+        //   chunksAll.set(chunk, position);
+        //   position += chunk.length;
+        // }
+
+        // Crear blob y url para cargar en model-viewer
+        // const blob = new Blob([chunksAll], { type: 'model/gltf-binary' });
+        // const blobUrl = URL.createObjectURL(blob);
+
+        // const modelViewer = document.getElementById('viewer');
+        // modelViewer.src = blobUrl;
+
+        // Opcional: esconder barra cuando termina
+        setTimeout(() => {
+          document.getElementById("progress-div").style.display = "none";
+          document.getElementById("progress-container").style.display = "none";
+        }, 500);
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        loadModelWithProgress("modelo.glb");
+      });
+    </script>
+
+    <script src="script.js"></script>
+    <script src="functions-model.js"></script>
+
+    <script>
+      // viewer.addEventListener("load", () => {
+      //   viewer.model.scale.set(4, 4, 4); // escala 2x
+      // });
+
+      let resetTimeout;
+      const initialOrbit = "-63deg 80deg 0.3m";
+      // const initialTarget = "0m 0m 0m";
+
+      viewer.addEventListener("camera-change", () => {
+        clearTimeout(resetTimeout);
+
+        resetTimeout = setTimeout(() => {
+          viewer.cameraOrbit = initialOrbit;
+          // viewer.cameraTarget = initialTarget;
+          viewer.fieldOfView = "30deg";
+        }, 500);
+      });
+    </script>
+
+    <script
+      type="module"
+      src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"
+    ></script>
+  </body>
 </html>
